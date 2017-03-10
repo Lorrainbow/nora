@@ -54,10 +54,10 @@ class Drive(object):
         for value,pins in ((left, (cls.L1, cls.L2)), (right, (cls.R1, cls.R2))):
             if value>=0:
                 wpi.softPwmWrite(pins[1],0)
-                wpi.softPwmWrite(pins[0],value)
+                wpi.softPwmWrite(pins[0],int(value))
             else: 
                 wpi.softPwmWrite(pins[0],0)
-                wpi.softPwmWrite(pins[1],-value)
+                wpi.softPwmWrite(pins[1],int(-value))
             
 
     # stop(): Stops both motors
