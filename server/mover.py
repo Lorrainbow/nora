@@ -17,6 +17,8 @@ LIGHT_ON = (255,255,255)
 
 BLUETOOTH_TIMEOUT = 1000
 
+SPEED = 70
+TURN_MULTIPLIER = 2.5
 
 class Wii(object):
     def __init__(self):
@@ -56,11 +58,12 @@ class Wii(object):
         y = y - self.y_offset
         if abs(y)<4:
             y = 0
+        y = y * TURN_MULTIPLIER
         accel = btns & (cwiid.BTN_1 | cwiid.BTN_2)
         if accel == cwiid.BTN_1:
-            Drive.turnForward(30+y,30-y)
+            Drive.turnForward(SPEED+y,30-y)
         elif accel == cwiid.BTN_2:
-            Drive.turnReverse(30+y,30-y)
+            Drive.turnReverse(SPEED+y,30-y)
         else:
             if y < 0:
                 Drive.spinRight(-y)
