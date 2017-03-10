@@ -75,6 +75,10 @@ class Wii(object):
             else:
                 Led.setColours(LIGHT_ON,LIGHT_ON)
                 self.lights=True
+
+        if btns & cwiid.BTN_B:
+            self.calibrate()
+            Servo.reset_pos()
                 
     def _connect(self):
         wm = cwiid.Wiimote()
@@ -100,10 +104,16 @@ class Wii(object):
         Drive.stop()
         d = threads.deferToThread(self._connect)
         d.addCallbacks(self.connected,self.connect)
+        
+    def calibrate(self, wm=None):
+        if not wm:
+            wm = self.wm
+        self.y_offset = wm.state['acc'][1]
+        
             
     def connected(self,wm):
         try:
-            self.y_offset = wm.state['acc'][1]
+            self.calibrate()
         except (ValueError, IOError, AttributeError, RuntimeError) as e:
             self.connect()
             return
