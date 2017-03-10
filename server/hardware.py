@@ -9,6 +9,7 @@ import time
 class Servo(object):
     MAX = 250
     MIN = 60
+    OFFSET = 0
    
     @classmethod
     def init(cls):
@@ -21,6 +22,7 @@ class Servo(object):
     @classmethod
     def set_pos(cls,value):
         """Set the servo to point to angle value (-90 -> 90)"""
+        value -= cls.OFFSET
         if value > 360:
             value  = value % 360
         if value > 180:
@@ -33,6 +35,9 @@ class Servo(object):
             f.write("0=%d\n" % int(pos))
             f.close()    
         return value
+        
+    def reset_pos(cls):
+        cls.OFFSET = cls.value
 
 class Drive(object):
     #pin numbers

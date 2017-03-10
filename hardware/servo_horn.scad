@@ -1,6 +1,6 @@
 wall_size = 1.5;
 pcb_width = 26.0;
-shaft_diameter = 5.2;
+shaft_diameter = 5.0;
 outer_shaft_diameter = shaft_diameter + wall_size * 2;
 wing_offset = 3.5;
 shaft_height = 3.0;
