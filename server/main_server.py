@@ -3,6 +3,7 @@
 import sys
 import io
 import time
+import os
 
 from twisted.web.server import Site, NOT_DONE_YET
 from twisted.internet import reactor, endpoints, task
@@ -10,13 +11,12 @@ from twisted.internet.threads import deferToThread
 from twisted.web.static import File
 from twisted.web.resource import Resource
 from twisted.python import log
-log.startLogging(sys.stdout)
+#log.startLogging(sys.stdout)
 
 import cam
 import mover
 
-STATIC_ROOT="../html"
-
+STATIC_ROOT=os.path.abspath(os.path.join(os.path.dirname(__file__),"../html"))
 
 class Root(Resource):
     def getChild(self, name, request):
