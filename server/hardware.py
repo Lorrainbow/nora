@@ -9,10 +9,10 @@ import time
 class Servo(object):
     MAX = 250
     MIN = 60
-    OFFSET = 0
    
     @classmethod
     def init(cls):
+        cls.offset = 0
         subprocess.call(("killall","servod"))
         time.sleep(0.05)
         subprocess.call(("servod","--p1pins=13","--pcm"))
@@ -22,14 +22,14 @@ class Servo(object):
     @classmethod
     def set_pos(cls,value):
         """Set the servo to point to angle value (-90 -> 90)"""
-        value -= cls.OFFSET
+        cls.value = value
+        value -= cls.offset
         if value > 360:
             value  = value % 360
         if value > 180:
             value -= 360
         value = max(-90,value)
         value = min(90,value)
-        cls.value = value
         pos = cls.MIN+((value+90)*(cls.MAX-cls.MIN))/180
         with open("/dev/servoblaster","w") as f:
             f.write("0=%d\n" % int(pos))
@@ -38,7 +38,7 @@ class Servo(object):
         
     @classmethod
     def reset_pos(cls):
-        cls.OFFSET = cls.value
+        cls.offset = cls.value
 
 class Drive(object):
     #pin numbers
