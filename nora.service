@@ -1,0 +1,12 @@
+[Unit]
+Description=Nora controller
+Requires=network-online
+After=network-online
+
+[Service]
+ExecStart=/usr/bin/python /home/pi/Nora/server/main_server.py
+
+[Install]
+WantedBy=multi-user.target
+
+
