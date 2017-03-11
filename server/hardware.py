@@ -36,6 +36,7 @@ class Servo(object):
             f.close()    
         return value
         
+    @classmethod
     def reset_pos(cls):
         cls.OFFSET = cls.value
 
@@ -45,6 +46,8 @@ class Drive(object):
     L2 = 8
     R1 = 10
     R2 = 9
+    LEFT_CAL = 1.0
+    RIGHT_CAL = 1.0
 
     @classmethod
     def init(cls):
@@ -56,6 +59,8 @@ class Drive(object):
 
     @classmethod
     def set_motors(cls,left,right):
+        left = left*cls.LEFT_CAL
+        right = right*cls.RIGHT_CAL
         for value,pins in ((left, (cls.L1, cls.L2)), (right, (cls.R1, cls.R2))):
             if value>=0:
                 wpi.softPwmWrite(pins[1],0)
