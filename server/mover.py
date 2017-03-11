@@ -11,7 +11,7 @@ from twisted.web.resource import Resource
 from hardware import Drive, Led, Servo
 import hardware
 
-BLUE = (0,0,255)
+BLUE = (0,0,64)
 LIGHT_OFF = (0,0,0)
 LIGHT_ON = (255,255,255)
 
@@ -26,7 +26,7 @@ class Wii(object):
         Led.init()
         Drive.init()
         time.sleep(0.1)
-        self.lights = False
+        self.lights = 0
         Led.setColours(LIGHT_OFF,LIGHT_OFF)
         self.y_offset = 0
         self.wm = None
@@ -38,11 +38,12 @@ class Wii(object):
     def poll(self):
         # this will be called repeatedly by twisted
         if self.wm=="PENDING":
-            if self.lights:
+            if self.lights < 2:
                 Led.setColours(BLUE,LIGHT_OFF)
             else:
                 Led.setColours(LIGHT_OFF,BLUE)
-            self.lights = not self.lights
+            self.lights += 1
+            self.lights %= 4
             return
         try:
             y = self.wm.state['acc'][1]
@@ -61,9 +62,9 @@ class Wii(object):
         y = y * TURN_MULTIPLIER
         accel = btns & (cwiid.BTN_1 | cwiid.BTN_2)
         if accel == cwiid.BTN_1:
-            Drive.turnForward(SPEED+y,30-y)
+            Drive.turnForward(SPEED-y,SPEED+y)
         elif accel == cwiid.BTN_2:
-            Drive.turnReverse(SPEED+y,30-y)
+            Drive.turnReverse(SPEED-y,SPEED+y)
         else:
             if y < 0:
                 Drive.spinRight(-y)
@@ -116,12 +117,14 @@ class Wii(object):
             
     def connected(self,wm):
         try:
-            self.calibrate()
+            self.calibrate(wm)
         except (ValueError, IOError, AttributeError, RuntimeError) as e:
+            print "error on connection stage"
+            print e
             self.connect()
             return
         self.wm = wm
-        print "connection complete"
+        print "Wiimote connected"
         self.lights = False
         Led.setColours(LIGHT_OFF,LIGHT_OFF)
         
