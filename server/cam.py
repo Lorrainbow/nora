@@ -34,7 +34,7 @@ class Cam(Resource):
         return self.output.last_frame
         
     def thread_worker(self):
-        with picamera.PiCamera(resolution='VGA', framerate=30) as camera:
+        with picamera.PiCamera(resolution=(320,240), framerate=10) as camera:
             time.sleep(2)
             start = time.time()
             camera.start_recording(self.output, format='mjpeg')
