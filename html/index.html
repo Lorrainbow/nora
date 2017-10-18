@@ -120,7 +120,7 @@
             piImage.src = "/cam?tm=" + tm;
           }
           // If we have a valid FULLTILT.DeviceOrientation object then use it
-          if (tm > lastCameraMoveTime+50) {
+          if (tm > lastCameraMoveTime+100) {
             lastCameraMoveTime = tm;
             if (deviceOrientation) {
                 var quat = deviceOrientation.getScreenAdjustedQuaternion();
@@ -131,7 +131,7 @@
                 console.log("euler");
                 console.log(euler.alpha.toString());
                 var rqst = new XMLHttpRequest();
-                rqst.open("GET","/pan?value=" + euler.alpha,true);
+                rqst.open("GET","/pan?pan=" + euler.alpha + "&tilt="+euler.beta,true);
                 rqst.send();
             }
           }
