@@ -34,8 +34,5 @@ factory = Site(root)
 
 endpoint = endpoints.TCP4ServerEndpoint(reactor, 80)
 endpoint.listen(factory)
-wii = mover.Wii()
-l = task.LoopingCall(wii.poll)
-l.start(0.3)
 
 reactor.run()

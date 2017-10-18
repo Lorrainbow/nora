@@ -35,9 +35,12 @@ class Cam(Resource):
         
     def thread_worker(self):
         with picamera.PiCamera(resolution=(320,240), framerate=10) as camera:
+            camera.hflip = True
+            camera.vflip = True
             time.sleep(2)
             start = time.time()
             camera.start_recording(self.output, format='mjpeg')
+            
             while self.recording:
                 camera.wait_recording(0.2)
             camera.stop_recording()
